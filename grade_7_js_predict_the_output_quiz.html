@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 7 JavaScript — Predict the Output Quiz</title>
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & THEME SYSTEM (Light & Dark Mode Support)
+       ========================================================================== */
+    :root {
+      --bg-app: #f4f6fb;
+      --bg-card: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-pill: #e2e8f0;
+      --bg-pill-hover: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+
+      /* Core palette: Blue · Purple · Green · Orange · Yellow */
+      --accent: #3b82f6;          /* Blue */
+      --accent-hover: #2563eb;
+      --accent-soft: #eff6ff;
+      --purple: #8b5cf6;
+      --purple-soft: #f5f3ff;
+      --success: #16a34a;         /* Green */
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fca5a5;
+      --warning: #ea580c;         /* Orange */
+      --warning-bg: #fff7ed;
+      --yellow: #eab308;
+      --yellow-soft: #fefce8;
+
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+
+      /* Code Editor Palette */
+      --code-bg: #1e222a;
+      --code-header: #161920;
+      --code-text: #e2e8f0;
+      --code-line-num: #5c6370;
+      --tok-tag: #e06c75;
+      --tok-keyword: #c678dd;
+      --tok-string: #98c379;
+      --tok-number: #d19a66;
+      --tok-func: #61afef;
+      --tok-op: #56b6c2;
+      --tok-comment: #7f848e;
+    }
+
+    body.dark-theme {
+      --bg-app: #0b0f19;
+      --bg-card: #131926;
+      --bg-subtle: #1a2234;
+      --bg-pill: #1e293b;
+      --bg-pill-hover: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #263147;
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-soft: #172554;
+      --purple: #a78bfa;
+      --purple-soft: #2e1065;
+      --success: #22c55e;
+      --success-bg: #052e16;
+      --success-border: #166534;
+      --danger: #ef4444;
+      --danger-bg: #450a0a;
+      --danger-border: #991b1b;
+      --warning: #fb923c;
+      --warning-bg: #431407;
+      --yellow: #facc15;
+      --yellow-soft: #422006;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 12px 30px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      padding-bottom: 3rem;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    /* ==========================================================================
+       HEADER & TOP BAR
+       ========================================================================== */
+    .app-header {
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-badge {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 10px;
+      letter-spacing: 0.4px;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+    }
+
+    .brand-text h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .stat-chip.streak {
+      color: var(--warning);
+      border-color: rgba(234, 88, 12, 0.25);
+      background-color: var(--warning-bg);
+    }
+
+    .icon-btn {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+    }
+
+    .icon-btn:hover {
+      background-color: var(--bg-pill);
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & FILTER BAR
+       ========================================================================== */
+    .container {
+      max-width: 960px;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .topic-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .pill-btn {
+      background-color: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      background-color: var(--bg-pill);
+      color: var(--text-primary);
+    }
+
+    .pill-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff;
+      border-color: transparent;
+      box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+    }
+
+    .mode-switch {
+      display: inline-flex;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 0.2rem;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mode-btn.active {
+      background-color: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+       PROGRESS BAR
+       ========================================================================== */
+    .progress-wrap {
+      margin-bottom: 1.25rem;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--bg-pill);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6, #22c55e);
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ==========================================================================
+       QUIZ CARD & CODE EDITOR BLOCK
+       ========================================================================== */
+    .quiz-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card-top {
+      padding: 1.25rem 1.5rem 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .topic-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.28rem 0.65rem;
+      border-radius: 6px;
+      background-color: var(--purple-soft);
+      color: var(--purple);
+    }
+
+    .output-type-badge {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .question-prompt {
+      padding: 0 1.5rem 1rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Code Editor Window */
+    .code-window {
+      margin: 0 1.5rem 1.25rem;
+      background-color: var(--code-bg);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid #2c313c;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .code-titlebar {
+      background-color: var(--code-header);
+      padding: 0.55rem 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #282c34;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot.red { background-color: #ff5f56; }
+    .dot.yellow { background-color: #ffbd2e; }
+    .dot.green { background-color: #27c93f; }
+
+    .code-filename {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.75rem;
+      color: #8b949e;
+    }
+
+    .scratchpad-toggle-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #e2e8f0;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .scratchpad-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .code-body {
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: var(--code-text);
+    }
+
+    .code-line {
+      display: flex;
+      gap: 1rem;
+      white-space: pre;
+    }
+
+    .line-num {
+      color: var(--code-line-num);
+      user-select: none;
+      text-align: right;
+      min-width: 1.4rem;
+    }
+
+    /* Syntax Highlighting */
+    .tok-tag { color: var(--tok-tag); }
+    .tok-kw { color: var(--tok-keyword); font-weight: 600; }
+    .tok-str { color: var(--tok-string); }
+    .tok-num { color: var(--tok-number); }
+    .tok-fn { color: var(--tok-func); }
+    .tok-op { color: var(--tok-op); }
+
+    /* ==========================================================================
+       SCRATCHPAD DRAWER
+       ========================================================================== */
+    .scratchpad-drawer {
+      margin: 0 1.5rem 1.25rem;
+      background-color: var(--bg-subtle);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+      display: none;
+    }
+
+    .scratchpad-drawer.open {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .scratchpad-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .scratchpad-header span {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .scratchpad-clear {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .scratchpad-input {
+      width: 100%;
+      min-height: 68px;
+      resize: vertical;
+      background-color: var(--bg-card);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+    }
+
+    .scratchpad-input:focus {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    /* ==========================================================================
+       ANSWER SECTION
+       ========================================================================== */
+    .answer-section {
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-top, .question-prompt, .answer-section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .code-window, .scratchpad-drawer, .feedback-box {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: left;
+      background-color: var(--bg-subtle);
+      border: 2px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-size: 0.95rem;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background-color: var(--accent-soft);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .option-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .option-btn.correct {
+      background-color: var(--success-bg);
+      border-color: var(--success);
+      color: var(--text-primary);
+    }
+
+    .option-btn.correct .option-letter {
+      background-color: var(--success);
+      border-color: var(--success);
+      color: #ffffff;
+    }
+
+    .option-btn.wrong {
+      background-color: var(--danger-bg);
+      border-color: var(--danger);
+      color: var(--text-primary);
+    }
+
+    .option-btn.wrong .option-letter {
+      background-color: var(--danger);
+      border-color: var(--danger);
+      color: #ffffff;
+    }
+
+    /* Type Exact Output */
+    .type-mode-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .type-hint {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .type-input-row {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .exact-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border-color);
+      background-color: var(--bg-subtle);
+      color: var(--text-primary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .exact-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background-color: var(--bg-card);
+    }
+
+    .exact-input.correct {
+      border-color: var(--success);
+      background-color: var(--success-bg);
+    }
+
+    .exact-input.wrong {
+      border-color: var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    /* Primary Buttons */
+    .primary-btn {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #ffffff;
+      border: none;
+      padding: 0.8rem 1.4rem;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    }
+
+    .primary-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+    }
+
+    .primary-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* ==========================================================================
+       FEEDBACK BOX
+       ========================================================================== */
+    .feedback-box {
+      margin: 0 1.5rem 1.5rem;
+      border-radius: var(--radius-md);
+      padding: 1.1rem 1.25rem;
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .feedback-box.visible {
+      display: block;
+    }
+
+    .feedback-box.correct {
+      background-color: var(--success-bg);
+      border: 1px solid var(--success-border);
+    }
+
+    .feedback-box.wrong {
+      background-color: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+    }
+
+    .feedback-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .feedback-status {
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .feedback-box.correct .feedback-status { color: var(--success); }
+    .feedback-box.wrong .feedback-status { color: var(--danger); }
+
+    .expected-pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.84rem;
+      font-weight: 700;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      color: var(--text-primary);
+    }
+
+    .steps-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 0.45rem;
+    }
+
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .steps-list li {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    .steps-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .steps-list code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background-color: rgba(100, 116, 139, 0.14);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    .card-footer-nav {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* ==========================================================================
+       SUMMARY / MASTERY REPORT
+       ========================================================================== */
+    .summary-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      display: none;
+    }
+
+    .summary-card.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .score-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #ffffff;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .score-ring .big-num {
+      font-size: 1.75rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .score-ring .sub-label {
+      font-size: 0.72rem;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.35rem;
+    }
+
+    .summary-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mastery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.85rem;
+      text-align: left;
+      margin-bottom: 1.75rem;
+    }
+
+    .mastery-item {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.9rem 1rem;
+    }
+
+    .mastery-item-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .mastery-bar-bg {
+      height: 7px;
+      background-color: var(--bg-pill);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mastery-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+      border-radius: 999px;
+    }
+
+    .summary-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .secondary-btn {
+      background-color: var(--bg-subtle);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.8rem 1.3rem;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+
+    .secondary-btn:hover {
+      background-color: var(--bg-pill);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAVIGATION & LIVE STATS -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-badge">JS 7</div>
+        <div class="brand-text">
+          <h1>Predict the Output — Revision Quiz</h1>
+          <p>Grade 7 JavaScript · Variables, Operators & Conditionals</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="stat-chip" title="Current Score">
+          <span>Score:</span>
+          <strong id="scoreDisplay">0 / 0</strong>
+        </div>
+        <div class="stat-chip streak" title="Current Correct Streak">
+          <span>Streak:</span>
+          <strong id="streakDisplay">0</strong>
+        </div>
+        <button class="icon-btn" id="themeToggleBtn" type="button" aria-label="Toggle Dark/Light Theme">
+          Dark Mode
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TOPIC FILTERS & ANSWER MODE TOGGLE -->
+    <div class="toolbar">
+      <div class="topic-pills" id="topicPills">
+        <button class="pill-btn active" data-topic="all">All Topics (12)</button>
+        <button class="pill-btn" data-topic="literals">Variables & Quotes</button>
+        <button class="pill-btn" data-topic="arithmetic">Arithmetic & Precedence</button>
+        <button class="pill-btn" data-topic="concat">String Concatenation</button>
+        <button class="pill-btn" data-topic="conditionals">Conditionals & Logic</button>
+      </div>
+
+      <div class="mode-switch" role="group" aria-label="Answer Input Mode">
+        <button class="mode-btn active" id="modeMcqBtn" type="button">Multiple Choice</button>
+        <button class="mode-btn" id="modeTypeBtn" type="button">Type Exact Output</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-meta">
+        <span id="questionCounter">Question 1 of 12</span>
+        <span id="percentComplete">0% Completed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- ACTIVE QUESTION CARD -->
+    <section class="quiz-card" id="quizCard">
+      <div class="card-top">
+        <span class="topic-tag" id="cardTopicTag">Topic</span>
+        <span class="output-type-badge" id="cardOutputBadge">Output via document.write()</span>
+      </div>
+
+      <h2 class="question-prompt" id="questionPrompt">
+        Predict the exact output of the following JavaScript snippet:
+      </h2>
+
+      <!-- CODE SNIPPET BLOCK -->
+      <div class="code-window">
+        <div class="code-titlebar">
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <span class="code-filename">revision_snippet.html</span>
+          <button class="scratchpad-toggle-btn" id="scratchpadToggle" type="button">
+            Trace Scratchpad
+          </button>
+        </div>
+        <div class="code-body" id="codeDisplay"></div>
+      </div>
+
+      <!-- INTERACTIVE TRACE SCRATCHPAD -->
+      <div class="scratchpad-drawer" id="scratchpadDrawer">
+        <div class="scratchpad-header">
+          <span>Variable Trace Scratchpad (work out values step by step)</span>
+          <button class="scratchpad-clear" id="scratchpadClear" type="button">Clear</button>
+        </div>
+        <textarea
+          class="scratchpad-input"
+          id="scratchpadInput"
+          placeholder="Example:&#10;a = 3, b = 8&#10;c = 8 - 3*2 + 4 = 8 - 6 + 4 = 6&#10;Condition 1: false..."
+        ></textarea>
+      </div>
+
+      <!-- ANSWER INTERACTION AREA -->
+      <div class="answer-section" id="answerSection">
+        <!-- Multiple Choice Options -->
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <!-- Type Exact Output Input -->
+        <div class="type-mode-box" id="typeModeBox" style="display: none;">
+          <p class="type-hint">
+            Type the exact text or number displayed (do not include outer quotes unless they actually print).
+          </p>
+          <div class="type-input-row">
+            <input
+              type="text"
+              class="exact-input"
+              id="exactInput"
+              placeholder="Type exact output here..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="primary-btn" id="submitExactBtn" type="button">Check Answer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP-BY-STEP EXPLANATION FEEDBACK -->
+      <div class="feedback-box" id="feedbackBox">
+        <div class="feedback-header">
+          <div class="feedback-status" id="feedbackStatus">Correct!</div>
+          <div class="expected-pill">Output: <span id="expectedOutputText"></span></div>
+        </div>
+        <div class="steps-title">Step-by-Step Evaluation</div>
+        <ul class="steps-list" id="explanationSteps"></ul>
+        <div class="card-footer-nav">
+          <button class="primary-btn" id="nextQuestionBtn" type="button">Next Question</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL MASTERY SUMMARY REPORT -->
+    <section class="summary-card" id="summaryCard">
+      <div class="score-ring">
+        <span class="big-num" id="finalScoreNum">10/12</span>
+        <span class="sub-label">Score</span>
+      </div>
+      <h2 class="summary-title" id="summaryTitle">Revision Session Complete!</h2>
+      <p class="summary-subtitle" id="summarySubtitle">Here is your topic-by-topic mastery breakdown.</p>
+
+      <div class="mastery-grid" id="masteryGrid"></div>
+
+      <div class="summary-actions">
+        <button class="secondary-btn" id="retryMissedBtn" type="button" style="display: none;">
+          Retry Missed Questions (<span id="missedCountSpan">0</span>)
+        </button>
+        <button class="primary-btn" id="restartAllBtn" type="button">
+          Practice Again
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* ==========================================================================
+       QUESTION BANK (12 Worksheet-Aligned Grade 7 JavaScript Problems)
+       ========================================================================== */
+    const QUESTION_BANK = [
+      {
+        id: 1,
+        topic: "literals",
+        topicLabel: "Variables & Quotes",
+        outputMethod: "document.write()",
+        code: `<script>
+  var a = 20, b = 21, c = "Dubai";
+  document.write("a+b+c");
+<\/script>`,
+        answer: "a+b+c",
+        options: ["a+b+c", "41Dubai", "2021Dubai", "Dubai2021"],
+        steps: [
+          "Variables <code>a = 20</code>, <code>b = 21</code>, and <code>c = \"Dubai\"</code> are declared in memory.",
+          "However, <code>document.write(\"a+b+c\");</code> wraps <code>a+b+c</code> inside double quotes.",
+          "In JavaScript, anything inside quotes is treated as a plain text string literal rather than variable names or addition.",
+          "Therefore, it prints the exact characters <code>a+b+c</code>."
+        ]
+      },
+      {
+        id: 2,
+        topic: "literals",
+        topicLabel: "Variables & Quotes",
+        outputMethod: "document.write()",
+        code: `<script>
+  var city = "Abu Dhabi";
+  var code = 971;
+  document.write(city + " " + "code");
+<\/script>`,
+        answer: "Abu Dhabi code",
+        options: ["Abu Dhabi 971", "city code", "Abu Dhabi code", "Abu Dhabicode"],
+        steps: [
+          "<code>city</code> is NOT in quotes, so JavaScript uses its stored value: <code>\"Abu Dhabi\"</code>.",
+          "<code>\" \"</code> adds a single space character.",
+          "<code>\"code\"</code> IS inside quotes, so it prints the literal word <code>code</code> instead of the number <code>971</code>.",
+          "Joining them together produces <code>Abu Dhabi code</code>."
+        ]
+      },
+      {
+        id: 3,
+        topic: "arithmetic",
+        topicLabel: "Arithmetic & Precedence",
+        outputMethod: "document.write()",
+        code: `<script>
+  var num1 = 54;
+  var num2 = 6;
+  var result = num1 / num2;
+  var total = result + 4 * 3;
+  document.write(total);
+<\/script>`,
+        answer: "21",
+        options: ["39", "21", "16", "12"],
+        steps: [
+          "<code>result = num1 / num2</code> evaluates <code>54 / 6 = 9</code>.",
+          "In <code>total = result + 4 * 3</code>, multiplication (<code>*</code>) has higher precedence than addition (<code>+</code>).",
+          "Calculate <code>4 * 3 = 12</code> first.",
+          "Then add <code>result</code>: <code>9 + 12 = 21</code>."
+        ]
+      },
+      {
+        id: 4,
+        topic: "arithmetic",
+        topicLabel: "Arithmetic & Precedence",
+        outputMethod: "document.write()",
+        code: `<script>
+  var z = 15 % 4;
+  var x = 15 / 3;
+  var q = z * x - x * 2;
+  document.write(q);
+<\/script>`,
+        answer: "5",
+        options: ["5", "10", "-5", "25"],
+        steps: [
+          "<code>z = 15 % 4</code> finds the remainder of <code>15 ÷ 4</code>, which is <code>3</code> (since 4 × 3 = 12, remainder 3).",
+          "<code>x = 15 / 3</code> divides 15 by 3, giving <code>5</code>.",
+          "Evaluate multiplications first: <code>z * x = 3 * 5 = 15</code> and <code>x * 2 = 5 * 2 = 10</code>.",
+          "Subtract: <code>15 - 10 = 5</code>."
+        ]
+      },
+      {
+        id: 5,
+        topic: "arithmetic",
+        topicLabel: "Arithmetic & Precedence",
+        outputMethod: "alert()",
+        code: `<script>
+  var x = 18;
+  var y = x + 12;
+  alert((x / 6 * 3 + y / 10) % 3 + 5);
+<\/script>`,
+        answer: "5",
+        options: ["5", "8", "6", "17"],
+        steps: [
+          "<code>x = 18</code> and <code>y = 18 + 12 = 30</code>.",
+          "Inside parentheses <code>(x / 6 * 3 + y / 10)</code>, evaluate <code>/</code> and <code>*</code> from left to right: <code>18 / 6 = 3</code>, then <code>3 * 3 = 9</code>, and <code>30 / 10 = 3</code>.",
+          "Sum inside parentheses: <code>9 + 3 = 12</code>.",
+          "Modulo runs before addition: <code>12 % 3 = 0</code> (12 divides evenly by 3). Finally, <code>0 + 5 = 5</code>."
+        ]
+      },
+      {
+        id: 6,
+        topic: "arithmetic",
+        topicLabel: "Arithmetic & Precedence",
+        outputMethod: "document.write()",
+        code: `<script>
+  var x = 4;
+  var y = 25;
+  document.write(x % y - (x + y));
+<\/script>`,
+        answer: "-25",
+        options: ["-25", "-29", "25", "-21"],
+        steps: [
+          "<code>x % y</code> calculates <code>4 % 25</code>. Because 4 is smaller than 25, 25 goes into 4 zero times with a remainder of <code>4</code>.",
+          "<code>(x + y)</code> calculates <code>4 + 25 = 29</code>.",
+          "Subtract the two results: <code>4 - 29 = -25</code>."
+        ]
+      },
+      {
+        id: 7,
+        topic: "concat",
+        topicLabel: "String Concatenation",
+        outputMethod: "document.write()",
+        code: `<script>
+  var p = 40;
+  var q = 25;
+  var r = "math";
+  var s = "quiz";
+  var t = 10;
+  document.write(p + q + r + s + t);
+<\/script>`,
+        answer: "65mathquiz10",
+        options: ["65mathquiz10", "4025mathquiz10", "75mathquiz", "65mathquiz"],
+        steps: [
+          "JavaScript evaluates <code>+</code> from left to right.",
+          "<code>p + q</code> adds two numbers first: <code>40 + 25 = 65</code>.",
+          "<code>65 + r</code> joins a number with a string: <code>\"65math\"</code>.",
+          "Once it becomes a string, all remaining <code>+</code> operators concatenate text: <code>\"65math\" + \"quiz\" + 10 = \"65mathquiz10\"</code>."
+        ]
+      },
+      {
+        id: 8,
+        topic: "concat",
+        topicLabel: "String Concatenation",
+        outputMethod: "document.write()",
+        code: `<script>
+  var item = "Bike";
+  var price1 = 150;
+  var price2 = 50;
+  var info = item + price1 + price2;
+  document.write(info);
+<\/script>`,
+        answer: "Bike15050",
+        options: ["Bike200", "Bike15050", "Bike 200", "200Bike"],
+        steps: [
+          "<code>item</code> is the string <code>\"Bike\"</code>.",
+          "Evaluating left to right: <code>\"Bike\" + 150</code> becomes the string <code>\"Bike150\"</code>.",
+          "Next, <code>\"Bike150\" + 50</code> concatenates <code>50</code> as text rather than adding numbers, giving <code>\"Bike15050\"</code>."
+        ]
+      },
+      {
+        id: 9,
+        topic: "concat",
+        topicLabel: "String Concatenation",
+        outputMethod: "document.write()",
+        code: `<script>
+  var ans = 9 + 6 + "4" + 2;
+  document.write(ans);
+<\/script>`,
+        answer: "1542",
+        options: ["21", "9642", "1542", "156"],
+        steps: [
+          "Start from the left: <code>9 + 6</code> are both numbers, so they add to <code>15</code>.",
+          "Next, <code>15 + \"4\"</code> encounters the string <code>\"4\"</code>, converting it to <code>\"154\"</code>.",
+          "Finally, <code>\"154\" + 2</code> joins <code>2</code> onto the text, producing <code>\"1542\"</code>."
+        ]
+      },
+      {
+        id: 10,
+        topic: "conditionals",
+        topicLabel: "Conditionals & Logic",
+        outputMethod: "document.write()",
+        code: `<script>
+  var a = 4, b = "80";
+  if (b == "40" && a <= 5)
+    document.write("Excellent");
+  else if (b != "80" || a > 10)
+    document.write("Good");
+  else if (b == "80" || a >= 20)
+    document.write("Awesome");
+  else
+    document.write("Try Again");
+<\/script>`,
+        answer: "Awesome",
+        options: ["Excellent", "Good", "Awesome", "Try Again"],
+        steps: [
+          "First <code>if</code>: <code>b == \"40\"</code> is <strong>false</strong>, so <code>false && true</code> is <strong>false</strong>. Skipped.",
+          "First <code>else if</code>: <code>b != \"80\"</code> is <strong>false</strong> and <code>a > 10</code> (<code>4 > 10</code>) is <strong>false</strong>. <code>false || false</code> is <strong>false</strong>. Skipped.",
+          "Second <code>else if</code>: <code>b == \"80\"</code> is <strong>true</strong>. Because <code>||</code> (OR) needs only one side to be true, the whole condition is <strong>true</strong>.",
+          "It prints <code>Awesome</code> and skips the remaining <code>else</code> block."
+        ]
+      },
+      {
+        id: 11,
+        topic: "conditionals",
+        topicLabel: "Conditionals & Logic",
+        outputMethod: "alert()",
+        code: `<script>
+  var a = 2, b = 10, c;
+  c = b - a * 3 + 2;
+  if (c > 8 || b == 5)
+    alert("Keep Going");
+  else if (c != 6 && b == 10)
+    alert("Almost There");
+  else if (!(c != 6 && b == 10))
+    alert("You Nailed It");
+  else
+    alert("Error");
+<\/script>`,
+        answer: "You Nailed It",
+        options: ["Keep Going", "Almost There", "You Nailed It", "Error"],
+        steps: [
+          "Calculate <code>c</code>: <code>a * 3 = 6</code>, then <code>10 - 6 + 2 = 6</code>.",
+          "First <code>if</code>: <code>6 > 8</code> is false and <code>10 == 5</code> is false → <strong>false</strong>.",
+          "First <code>else if</code>: <code>c != 6</code> (<code>6 != 6</code>) is <strong>false</strong>, so <code>false && true</code> is <strong>false</strong>.",
+          "Second <code>else if</code>: <code>!(c != 6 && b == 10)</code> negates <code>false</code> with <code>!</code> (NOT), turning it into <strong>true</strong>! Prints <code>You Nailed It</code>."
+        ]
+      },
+      {
+        id: 12,
+        topic: "conditionals",
+        topicLabel: "Conditionals & Logic",
+        outputMethod: "document.write()",
+        code: `<script>
+  var marks = 75;
+  var bonus = 5;
+  if (marks + bonus >= 80 && !(marks < 70))
+    document.write("Star Coder");
+  else
+    document.write("Keep Practicing");
+<\/script>`,
+        answer: "Star Coder",
+        options: ["Star Coder", "Keep Practicing", "true", "80"],
+        steps: [
+          "Left side of <code>&&</code>: <code>marks + bonus >= 80</code> evaluates <code>75 + 5 >= 80</code> → <code>80 >= 80</code>, which is <strong>true</strong>.",
+          "Right side of <code>&&</code>: <code>marks < 70</code> (<code>75 < 70</code>) is <strong>false</strong>, and <code>!</code> flips it to <strong>true</strong>.",
+          "Both sides of <code>&&</code> are <strong>true</strong> (<code>true && true</code>), so it prints <code>Star Coder</code>."
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       APPLICATION STATE
+       ========================================================================== */
+    const state = {
+      selectedTopic: "all",
+      answerMode: "mcq",
+      activeQuestions: [],
+      currentIndex: 0,
+      score: 0,
+      answeredCount: 0,
+      streak: 0,
+      isCurrentAnswered: false,
+      missedQuestions: [],
+      topicStats: {}
+    };
+
+    /* ==========================================================================
+       DOM REFERENCES
+       ========================================================================== */
+    const el = {
+      themeToggleBtn: document.getElementById("themeToggleBtn"),
+      scoreDisplay: document.getElementById("scoreDisplay"),
+      streakDisplay: document.getElementById("streakDisplay"),
+      topicPills: document.getElementById("topicPills"),
+      modeMcqBtn: document.getElementById("modeMcqBtn"),
+      modeTypeBtn: document.getElementById("modeTypeBtn"),
+      progressWrap: document.getElementById("progressWrap"),
+      questionCounter: document.getElementById("questionCounter"),
+      percentComplete: document.getElementById("percentComplete"),
+      progressFill: document.getElementById("progressFill"),
+      quizCard: document.getElementById("quizCard"),
+      cardTopicTag: document.getElementById("cardTopicTag"),
+      cardOutputBadge: document.getElementById("cardOutputBadge"),
+      codeDisplay: document.getElementById("codeDisplay"),
+      scratchpadToggle: document.getElementById("scratchpadToggle"),
+      scratchpadDrawer: document.getElementById("scratchpadDrawer"),
+      scratchpadInput: document.getElementById("scratchpadInput"),
+      scratchpadClear: document.getElementById("scratchpadClear"),
+      optionsGrid: document.getElementById("optionsGrid"),
+      typeModeBox: document.getElementById("typeModeBox"),
+      exactInput: document.getElementById("exactInput"),
+      submitExactBtn: document.getElementById("submitExactBtn"),
+      feedbackBox: document.getElementById("feedbackBox"),
+      feedbackStatus: document.getElementById("feedbackStatus"),
+      expectedOutputText: document.getElementById("expectedOutputText"),
+      explanationSteps: document.getElementById("explanationSteps"),
+      nextQuestionBtn: document.getElementById("nextQuestionBtn"),
+      summaryCard: document.getElementById("summaryCard"),
+      finalScoreNum: document.getElementById("finalScoreNum"),
+      summaryTitle: document.getElementById("summaryTitle"),
+      summarySubtitle: document.getElementById("summarySubtitle"),
+      masteryGrid: document.getElementById("masteryGrid"),
+      retryMissedBtn: document.getElementById("retryMissedBtn"),
+      missedCountSpan: document.getElementById("missedCountSpan"),
+      restartAllBtn: document.getElementById("restartAllBtn")
+    };
+
+    /* ==========================================================================
+       SYNTAX HIGHLIGHTER
+       ========================================================================== */
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function highlightCodeLine(rawLine) {
+      let escaped = escapeHtml(rawLine);
+
+      if (escaped.includes("&lt;script&gt;") || escaped.includes("&lt;/script&gt;")) {
+        return escaped.replace(/(&lt;\/?script&gt;)/g, '<span class="tok-tag">$1</span>');
+      }
+
+      const tokenRegex = /(".*?")|(var|if|else)\b|(document\.write|alert)\b|\b(\d+)\b/g;
+      return escaped.replace(tokenRegex, (match, strGrp, kwGrp, fnGrp, numGrp) => {
+        if (strGrp) return `<span class="tok-str">${strGrp}</span>`;
+        if (kwGrp) return `<span class="tok-kw">${kwGrp}</span>`;
+        if (fnGrp) return `<span class="tok-fn">${fnGrp}</span>`;
+        if (numGrp) return `<span class="tok-num">${numGrp}</span>`;
+        return match;
+      });
+    }
+
+    function renderCodeBlock(codeString) {
+      const lines = codeString.split("\n");
+      el.codeDisplay.innerHTML = lines
+        .map((line, idx) => {
+          return `<div class="code-line"><span class="line-num">${idx + 1}</span><span>${highlightCodeLine(line)}</span></div>`;
+        })
+        .join("");
+    }
+
+    /* ==========================================================================
+       QUIZ ENGINE
+       ========================================================================== */
+    function startQuiz(customQuestionList = null) {
+      if (customQuestionList) {
+        state.activeQuestions = [...customQuestionList];
+      } else if (state.selectedTopic === "all") {
+        state.activeQuestions = [...QUESTION_BANK];
+      } else {
+        state.activeQuestions = QUESTION_BANK.filter(q => q.topic === state.selectedTopic);
+      }
+
+      state.currentIndex = 0;
+      state.score = 0;
+      state.answeredCount = 0;
+      state.streak = 0;
+      state.isCurrentAnswered = false;
+      state.missedQuestions = [];
+      state.topicStats = {};
+
+      state.activeQuestions.forEach(q => {
+        if (!state.topicStats[q.topic]) {
+          state.topicStats[q.topic] = { label: q.topicLabel, correct: 0, total: 0 };
+        }
+        state.topicStats[q.topic].total += 1;
+      });
+
+      el.summaryCard.classList.remove("visible");
+      el.quizCard.style.display = "block";
+      el.progressWrap.style.display = "block";
+
+      updateHeaderStats();
+      renderCurrentQuestion();
+    }
+
+    function updateHeaderStats() {
+      el.scoreDisplay.textContent = `${state.score} / ${state.answeredCount}`;
+      el.streakDisplay.textContent = state.streak;
+
+      const total = state.activeQuestions.length;
+      const pct = total > 0 ? Math.round((state.answeredCount / total) * 100) : 0;
+      el.questionCounter.textContent = `Question ${Math.min(state.currentIndex + 1, total)} of ${total}`;
+      el.percentComplete.textContent = `${pct}% Completed`;
+      el.progressFill.style.width = `${pct}%`;
+    }
+
+    function renderCurrentQuestion() {
+      const q = state.activeQuestions[state.currentIndex];
+      state.isCurrentAnswered = false;
+
+      el.feedbackBox.className = "feedback-box";
+      el.scratchpadInput.value = "";
+      el.exactInput.value = "";
+      el.exactInput.className = "exact-input";
+      el.exactInput.disabled = false;
+      el.submitExactBtn.disabled = false;
+
+      el.cardTopicTag.textContent = q.topicLabel;
+      el.cardOutputBadge.textContent = `Output via ${q.outputMethod}`;
+      renderCodeBlock(q.code);
+
+      el.nextQuestionBtn.textContent =
+        state.currentIndex === state.activeQuestions.length - 1
+          ? "View Mastery Report"
+          : "Next Question";
+
+      const letters = ["A", "B", "C", "D"];
+      el.optionsGrid.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn";
+        btn.dataset.value = opt;
+        btn.innerHTML = `
+          <span class="option-letter">${letters[i]}</span>
+          <span class="option-value">${escapeHtml(opt)}</span>
+        `;
+        btn.addEventListener("click", () => handleAnswerSubmit(opt, btn));
+        el.optionsGrid.appendChild(btn);
+      });
+
+      syncAnswerModeVisibility();
+      updateHeaderStats();
+    }
+
+    function syncAnswerModeVisibility() {
+      if (state.answerMode === "mcq") {
+        el.optionsGrid.style.display = "grid";
+        el.typeModeBox.style.display = "none";
+      } else {
+        el.optionsGrid.style.display = "none";
+        el.typeModeBox.style.display = "flex";
+        if (!state.isCurrentAnswered) {
+          setTimeout(() => el.exactInput.focus(), 50);
+        }
+      }
+    }
+
+    function handleAnswerSubmit(userAnswer, clickedBtn = null) {
+      if (state.isCurrentAnswered) return;
+      const trimmedUser = userAnswer.trim();
+      if (trimmedUser === "") return;
+
+      state.isCurrentAnswered = true;
+      state.answeredCount += 1;
+
+      const q = state.activeQuestions[state.currentIndex];
+      const isCorrect = trimmedUser === q.answer;
+
+      if (isCorrect) {
+        state.score += 1;
+        state.streak += 1;
+        state.topicStats[q.topic].correct += 1;
+      } else {
+        state.streak = 0;
+        state.missedQuestions.push(q);
+      }
+
+      const allOptionBtns = el.optionsGrid.querySelectorAll(".option-btn");
+      allOptionBtns.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.value === q.answer) {
+          btn.classList.add("correct");
+        } else if (btn === clickedBtn && !isCorrect) {
+          btn.classList.add("wrong");
+        }
+      });
+
+      el.exactInput.disabled = true;
+      el.submitExactBtn.disabled = true;
+      el.exactInput.classList.add(isCorrect ? "correct" : "wrong");
+
+      el.feedbackBox.className = `feedback-box visible ${isCorrect ? "correct" : "wrong"}`;
+      el.feedbackStatus.textContent = isCorrect
+        ? "Correct — excellent trace"
+        : "Not quite — check the step-by-step below";
+      el.expectedOutputText.textContent = q.answer;
+
+      el.explanationSteps.innerHTML = q.steps.map(step => `<li>${step}</li>`).join("");
+
+      updateHeaderStats();
+    }
+
+    function showSummaryReport() {
+      el.quizCard.style.display = "none";
+      el.progressWrap.style.display = "none";
+      el.summaryCard.classList.add("visible");
+
+      const total = state.activeQuestions.length;
+      const pct = total > 0 ? Math.round((state.score / total) * 100) : 0;
+
+      el.finalScoreNum.textContent = `${state.score}/${total}`;
+
+      if (pct === 100) {
+        el.summaryTitle.textContent = "Perfect Score — JavaScript Master";
+        el.summarySubtitle.textContent = "You traced every variable, operator, and condition flawlessly.";
+      } else if (pct >= 75) {
+        el.summaryTitle.textContent = "Great Job — Almost Ready for the Exam";
+        el.summarySubtitle.textContent = `You scored ${pct}%. Review any tricky operator precedence rules below.`;
+      } else {
+        el.summaryTitle.textContent = "Good Practice Session";
+        el.summarySubtitle.textContent = `You scored ${pct}%. Use the Retry Missed button to master the ones you missed.`;
+      }
+
+      el.masteryGrid.innerHTML = Object.values(state.topicStats)
+        .map(stat => {
+          const topicPct = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0;
+          return `
+            <div class="mastery-item">
+              <div class="mastery-item-head">
+                <span>${stat.label}</span>
+                <span>${stat.correct}/${stat.total} (${topicPct}%)</span>
+              </div>
+              <div class="mastery-bar-bg">
+                <div class="mastery-bar-fill" style="width: ${topicPct}%"></div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      if (state.missedQuestions.length > 0) {
+        el.retryMissedBtn.style.display = "inline-block";
+        el.missedCountSpan.textContent = state.missedQuestions.length;
+      } else {
+        el.retryMissedBtn.style.display = "none";
+      }
+    }
+
+    /* ==========================================================================
+       EVENT LISTENERS
+       ========================================================================== */
+    el.topicPills.addEventListener("click", e => {
+      const btn = e.target.closest(".pill-btn");
+      if (!btn) return;
+      document.querySelectorAll(".pill-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      state.selectedTopic = btn.dataset.topic;
+      startQuiz();
+    });
+
+    el.modeMcqBtn.addEventListener("click", () => {
+      state.answerMode = "mcq";
+      el.modeMcqBtn.classList.add("active");
+      el.modeTypeBtn.classList.remove("active");
+      syncAnswerModeVisibility();
+    });
+
+    el.modeTypeBtn.addEventListener("click", () => {
+      state.answerMode = "type";
+      el.modeTypeBtn.classList.add("active");
+      el.modeMcqBtn.classList.remove("active");
+      syncAnswerModeVisibility();
+    });
+
+    el.submitExactBtn.addEventListener("click", () => {
+      handleAnswerSubmit(el.exactInput.value);
+    });
+
+    el.exactInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (!state.isCurrentAnswered) {
+          handleAnswerSubmit(el.exactInput.value);
+        } else {
+          el.nextQuestionBtn.click();
+        }
+      }
+    });
+
+    el.scratchpadToggle.addEventListener("click", () => {
+      el.scratchpadDrawer.classList.toggle("open");
+      if (el.scratchpadDrawer.classList.contains("open")) {
+        el.scratchpadInput.focus();
+      }
+    });
+
+    el.scratchpadClear.addEventListener("click", () => {
+      el.scratchpadInput.value = "";
+      el.scratchpadInput.focus();
+    });
+
+    el.nextQuestionBtn.addEventListener("click", () => {
+      if (state.currentIndex < state.activeQuestions.length - 1) {
+        state.currentIndex += 1;
+        renderCurrentQuestion();
+      } else {
+        showSummaryReport();
+      }
+    });
+
+    el.retryMissedBtn.addEventListener("click", () => {
+      const missedCopy = [...state.missedQuestions];
+      startQuiz(missedCopy);
+    });
+
+    el.restartAllBtn.addEventListener("click", () => {
+      startQuiz();
+    });
+
+    el.themeToggleBtn.addEventListener("click", () => {
+      const isDark = document.body.classList.toggle("dark-theme");
+      el.themeToggleBtn.textContent = isDark ? "Light Mode" : "Dark Mode";
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      startQuiz();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayan's Year 7 JavaScript Coding Challenge</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0f111a;
+    --surface: #1a1d2e;
+    --surface-2: #22263a;
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #e8eaf2;
+    --text-muted: #9ba3c0;
+    --primary: #7c6bff;
+    --primary-glow: rgba(124, 107, 255, 0.35);
+    --success: #34d399;
+    --success-bg: rgba(52, 211, 153, 0.12);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Background subtle gradient */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 107, 255, 0.18), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 0%, rgba(56, 189, 248, 0.08), transparent);
+    pointer-events: none;
+    z-index: -1;
+}
+
+header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 45%, #1e3a5f 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(124, 107, 255, 0.5), transparent);
+}
+
+header h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    background: linear-gradient(to right, #fff, #c7d2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+header .subtitle {
+    font-size: 1.05rem;
+    color: #a5b4fc;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+header .student-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #e0e7ff;
+    backdrop-filter: blur(8px);
+}
+
+.container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+}
+
+/* Progress */
+.progress-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.progress-box strong {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#progressText {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 6px 0 14px;
+}
+
+.progress-bar {
+    height: 10px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #7c6bff, #a78bfa);
+    border-radius: 999px;
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 16px var(--primary-glow);
+}
+
+/* Topics */
+.topic {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.topic h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #c4b5fd;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Tasks */
+.task {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 16px 0;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.task:hover {
+    border-color: rgba(124, 107, 255, 0.25);
+}
+
+.task.completed {
+    border-color: rgba(52, 211, 153, 0.45);
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.15);
+}
+
+.task h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+textarea {
+    width: 100%;
+    min-height: 140px;
+    resize: vertical;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 13.5px;
+    line-height: 1.55;
+    background: #0d0f17;
+    color: #e2e8f0;
+    margin-bottom: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+textarea::placeholder {
+    color: #64748b;
+}
+
+/* Buttons */
+button {
+    border: none;
+    border-radius: 9px;
+    padding: 9px 16px;
+    margin: 0 6px 6px 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.complete-btn {
+    background: linear-gradient(135deg, #7c6bff, #6d5ce7);
+    color: white;
+    box-shadow: 0 4px 14px rgba(124, 107, 255, 0.35);
+}
+
+.complete-btn:hover {
+    box-shadow: 0 6px 20px rgba(124, 107, 255, 0.45);
+}
+
+.hint-btn {
+    background: rgba(124, 107, 255, 0.12);
+    color: #c4b5fd;
+    border: 1px solid rgba(124, 107, 255, 0.25);
+}
+
+.hint-btn:hover {
+    background: rgba(124, 107, 255, 0.2);
+}
+
+.solution-btn {
+    background: rgba(52, 211, 153, 0.1);
+    color: #6ee7b7;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.solution-btn:hover {
+    background: rgba(52, 211, 153, 0.18);
+}
+
+/* Feedback boxes */
+.feedback {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    display: none;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.hint-box {
+    background: var(--warning-bg);
+    color: #fcd34d;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.solution-box {
+    background: var(--success-bg);
+    color: #6ee7b7;
+    border: 1px solid rgba(52, 211, 153, 0.2);
+    white-space: pre-wrap;
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 13px;
+}
+
+/* Action buttons */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+
+#result {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 36px 28px;
+    border-radius: var(--radius);
+    display: none;
+    margin-top: 28px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+#result h2 {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+#result h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a78bfa, #7c6bff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 8px 0 12px;
+}
+
+#result p {
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+footer {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 32px 20px 40px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    .container {
+        padding: 24px 14px 50px;
+    }
+
+    .topic {
+        padding: 20px 16px;
+    }
+
+    .task {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>JavaScript Coding Challenge</h1>
+    <p class="subtitle">Year 7 ICT · Write the code yourself</p>
+    <div class="student-badge">
+        <span>👨‍💻</span>
+        <span>Personalised for <strong>Ayan</strong></span>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="progress-box">
+        <strong>🏆 Coding Progress</strong>
+        <p id="progressText">0 tasks completed</p>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div id="quiz"></div>
+
+    <div class="actions">
+        <button class="complete-btn" onclick="showResults()">🏁 Finish Challenge</button>
+        <button class="hint-btn" onclick="resetQuiz()">🔄 Restart Quiz</button>
+    </div>
+
+    <div id="result"></div>
+
+</div>
+
+<footer>
+    Every programmer makes mistakes. Debug, learn and try again.
+</footer>
+
+<script>
+const sections = [
+{
+    title: "🧱 Variables and Data Types",
+    tasks: [
+    {
+        question: "Task 1: Create a variable called studentName and store your name in it. Display the variable using console.log().",
+        hint: "Use let to create the variable. Remember that text needs quotation marks.",
+        solution: `let studentName = "Ayan";
+console.log(studentName);`
+    },
+    {
+        question: "Task 2: Create three variables: age (Number), isStudent (Boolean) and favouriteSubject (String). Display all three.",
+        hint: "Numbers do not need quotation marks. Boolean values are true or false.",
+        solution: `let age = 12;
+let isStudent = true;
+let favouriteSubject = "ICT";
+
+console.log(age);
+console.log(isStudent);
+console.log(favouriteSubject);`
+    },
+    {
+        question: "Task 3: Create two variables firstName and schoolName. Use string concatenation to display: I am Ayan and I study at ABC School.",
+        hint: "Use + to join the text and variables. Include spaces inside your strings.",
+        solution: `let firstName = "Ayan";
+let schoolName = "ABC School";
+
+console.log("I am " + firstName + " and I study at " + schoolName);`
+    }
+    ]
+},
+{
+    title: "🧮 Arithmetic Operators",
+    tasks: [
+    {
+        question: "Task 4: Create two variables num1 = 15 and num2 = 5. Display their addition, subtraction, multiplication and division.",
+        hint: "Use +, -, * and / inside console.log().",
+        solution: `let num1 = 15;
+let num2 = 5;
+
+console.log(num1 + num2);
+console.log(num1 - num2);
+console.log(num1 * num2);
+console.log(num1 / num2);`
+    },
+    {
+        question: "Task 5: Calculate the remainder when 17 is divided by 4 using the modulus operator.",
+        hint: "The modulus operator is %.",
+        solution: `let remainder = 17 % 4;
+console.log(remainder);`
+    }
+    ]
+},
+{
+    title: "⚖️ Comparison and Logical Operators",
+    tasks: [
+    {
+        question: "Task 6: Create x = 10 and y = 20. Display the results of x < y, x > y and x === y.",
+        hint: "Comparison expressions return true or false.",
+        solution: `let x = 10;
+let y = 20;
+
+console.log(x < y);
+console.log(x > y);
+console.log(x === y);`
+    },
+    {
+        question: "Task 7: Create age = 12 and hasPermission = true. Use the AND operator to check if age is at least 12 and permission is true.",
+        hint: "Use && to join the two conditions.",
+        solution: `let age = 12;
+let hasPermission = true;
+
+console.log(age >= 12 && hasPermission === true);`
+    },
+    {
+        question: "Task 8: Create isHoliday = false. Display the result of isHoliday OR NOT isHoliday.",
+        hint: "Logical OR is || and logical NOT is !.",
+        solution: `let isHoliday = false;
+
+console.log(isHoliday || !isHoliday);`
+    }
+    ]
+},
+{
+    title: "🛠️ Simple and Compound Assignment",
+    tasks: [
+    {
+        question: "Task 9: Create a variable score and assign 20 to it. Then change its value to 50 using simple assignment. Display score.",
+        hint: "Use the = operator twice.",
+        solution: `let score = 20;
+score = 50;
+
+console.log(score);`
+    },
+    {
+        question: "Task 10: Create coins = 10. Add 5 coins using compound assignment +=. Display the updated value.",
+        hint: "You do not need to write coins = coins + 5.",
+        solution: `let coins = 10;
+coins += 5;
+
+console.log(coins);`
+    },
+    {
+        question: "Task 11: Create lives = 5. Multiply the value by 2 using *=, then subtract 3 using -=. Display the final value.",
+        hint: "Use lives *= 2 followed by lives -= 3.",
+        solution: `let lives = 5;
+lives *= 2;
+lives -= 3;
+
+console.log(lives);`
+    }
+    ]
+},
+{
+    title: "🔤 String Manipulation",
+    tasks: [
+    {
+        question: "Task 12: Create a string called message with the value 'hello year 7'. Display it in uppercase.",
+        hint: "Use the toUpperCase() function after the variable name.",
+        solution: `let message = "hello year 7";
+
+console.log(message.toUpperCase());`
+    },
+    {
+        question: "Task 13: Create a variable called greeting with the value 'WELCOME TO ICT'. Convert it into lowercase.",
+        hint: "Use the toLowerCase() function.",
+        solution: `let greeting = "WELCOME TO ICT";
+
+console.log(greeting.toLowerCase());`
+    },
+    {
+        question: "Task 14: Create a variable word = 'JavaScript'. Display the number of characters using .length.",
+        hint: "length is a property. Do not add parentheses.",
+        solution: `let word = "JavaScript";
+
+console.log(word.length);`
+    }
+    ]
+},
+{
+    title: "🪟 Popup Boxes and If/Else",
+    tasks: [
+    {
+        question: "Task 15: Use alert() to display the message 'Welcome to JavaScript!'.",
+        hint: "Write the message inside the parentheses and quotation marks.",
+        solution: `alert("Welcome to JavaScript!");`
+    },
+    {
+        question: "Task 16: Use prompt() to ask the user for their name. Store the answer in a variable and display it using alert().",
+        hint: "prompt() can be stored in a variable.",
+        solution: `let userName = prompt("What is your name?");
+
+alert(userName);`
+    },
+    {
+        question: "Task 17: Use confirm() to ask 'Are you ready?'. Store the result in a variable called ready and display it using console.log().",
+        hint: "confirm() returns true or false.",
+        solution: `let ready = confirm("Are you ready?");
+
+console.log(ready);`
+    },
+    {
+        question: "Task 18: Create marks = 65. If marks are 50 or more, display 'Pass'. Otherwise display 'Try again'.",
+        hint: "Use if (marks >= 50) followed by else.",
+        solution: `let marks = 65;
+
+if (marks >= 50) {
+    console.log("Pass");
+} else {
+    console.log("Try again");
+}`
+    },
+    {
+        question: "Task 19: Ask the user to enter their age using prompt(). If the age is 13 or more, display 'You can join'. Otherwise display 'Too young'.",
+        hint: "Remember to convert the prompt input into a number using Number().",
+        solution: `let age = Number(prompt("Enter your age:"));
+
+if (age >= 13) {
+    alert("You can join");
+} else {
+    alert("Too young");
+}`
+    }
+    ]
+},
+{
+    title: "🤖 Artificial Intelligence and Machine Learning",
+    tasks: [
+    {
+        question: "Task 20: Write a JavaScript comment explaining what Artificial Intelligence (AI) is.",
+        hint: "Comments begin with //. Explain that machines can perform tasks that usually need human intelligence.",
+        solution: `// Artificial Intelligence allows machines
+// to perform tasks that usually require
+// human intelligence.`
+    },
+    {
+        question: "Task 21: Write a JavaScript comment explaining Machine Learning (ML) and how it learns from data.",
+        hint: "Mention learning patterns from examples or data.",
+        solution: `// Machine Learning is a type of AI.
+// It learns patterns from data and uses
+// those patterns to make predictions.`
+    },
+    {
+        question: "Task 22: Write a two-line comment describing one real-life example of AI and explaining what it does.",
+        hint: "You could write about voice assistants, face recognition or video recommendations.",
+        solution: `// A voice assistant uses AI to recognise speech.
+// It can answer questions and follow voice commands.`
+    }
+    ]
+}
+];
+
+const quiz = document.getElementById("quiz");
+let completedTasks = 0;
+let totalTasks = 0;
+
+sections.forEach((section, sectionIndex) => {
+    let sectionHTML = `
+    <div class="topic">
+        <h2>${section.title}</h2>
+    `;
+
+    section.tasks.forEach((task, taskIndex) => {
+        totalTasks++;
+        const id = `task-${sectionIndex}-${taskIndex}`;
+
+        sectionHTML += `
+        <div class="task" id="${id}">
+            <h3>${task.question}</h3>
+            <textarea id="code-${id}" placeholder="// Write your JavaScript code here..."></textarea>
+            <button class="complete-btn" onclick="completeTask('${id}')">✓ Mark Completed</button>
+            <button class="hint-btn" onclick="showHint('${id}')">💡 Show Hint</button>
+            <button class="solution-btn" onclick="showSolution('${id}')">👀 Show Solution</button>
+            <div class="feedback hint-box" id="hint-${id}">${task.hint}</div>
+            <div class="feedback solution-box" id="solution-${id}">${task.solution}</div>
+        </div>
+        `;
+    });
+
+    sectionHTML += `</div>`;
+    quiz.innerHTML += sectionHTML;
+});
+
+function completeTask(id) {
+    const codeBox = document.getElementById("code-" + id);
+    if (codeBox.value.trim() === "") {
+        alert("Write your code before marking the task complete!");
+        return;
+    }
+    const taskBox = document.getElementById(id);
+    if (!taskBox.classList.contains("completed")) {
+        taskBox.classList.add("completed");
+        completedTasks++;
+        updateProgress();
+    }
+}
+
+function showHint(id) {
+    const box = document.getElementById("hint-" + id);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function showSolution(id) {
+    const box = document.getElementById("solution-" + id);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function updateProgress() {
+    document.getElementById("progressText").textContent =
+        completedTasks + " / " + totalTasks + " tasks completed";
+    document.getElementById("progressFill").style.width =
+        (completedTasks / totalTasks * 100) + "%";
+}
+
+function showResults() {
+    const percentage = Math.round((completedTasks / totalTasks) * 100);
+    let message;
+
+    if (percentage === 100) {
+        message = "Amazing work, Ayan! You completed every coding mission! 🏆";
+    } else if (percentage >= 70) {
+        message = "Great job, Ayan! Keep practising the remaining tasks! 🌟";
+    } else if (percentage >= 40) {
+        message = "Good start, Ayan! Review the hints and keep going! 💪";
+    } else {
+        message = "Keep trying, Ayan! Coding takes practice. Every mistake helps you learn! 🚀";
+    }
+
+    const result = document.getElementById("result");
+    result.style.display = "block";
+    result.innerHTML = `
+        <h2>Your Final Results</h2>
+        <h1>${percentage}%</h1>
+        <p>${completedTasks} out of ${totalTasks} tasks completed</p>
+        <p>${message}</p>
+    `;
+    result.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetQuiz() {
+    if (!confirm("Are you sure you want to restart the quiz?")) return;
+    location.reload();
+}
+</script>
+
+</body>
+</html>

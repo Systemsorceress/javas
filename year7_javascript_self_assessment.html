@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Year 7 ICT | JavaScript Quest</title>
+<style>
+:root{
+ --ink:#17233c;--muted:#63708a;--paper:#f6f8ff;--card:#fff;--line:#e5eaf5;
+ --purple:#7057e8;--blue:#2878d7;--teal:#159b8a;--orange:#ed9940;
+ --pink:#e76d9d;--good:#16845e;--bad:#c44d59;--shadow:0 12px 32px rgba(35,49,89,.09)
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 8% 0%,#e9e4ff 0,transparent 27%),radial-gradient(circle at 100% 10%,#dff6f2 0,transparent 25%),var(--paper);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);line-height:1.5}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1050px;margin:auto;padding:24px 18px 60px}
+.hero{background:linear-gradient(120deg,#30276f,#6552ce 55%,#398cbb);color:white;border-radius:26px;padding:28px 30px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero:after{content:"{ }";position:absolute;right:28px;top:0;font-size:100px;font-weight:900;opacity:.13;transform:rotate(-9deg)}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:.75rem;font-weight:800;opacity:.85}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.08;margin:8px 0}
+.hero p{max-width:650px;margin:10px 0 0;color:#eeeaff}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{border:1px solid #ffffff55;background:#ffffff18;padding:6px 11px;border-radius:30px;font-size:.82rem}
+.toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:20px 2px;flex-wrap:wrap}
+.progress-area{flex:1;min-width:220px}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:var(--muted);font-weight:700;margin-bottom:7px}
+.track{height:10px;background:#e6e9f3;border-radius:20px;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--teal));transition:width .25s}
+.toolbar-actions{display:flex;gap:8px}
+.btn{border:0;border-radius:12px;padding:10px 15px;font-weight:800;transition:.15s}
+.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+.btn-primary{background:var(--purple);color:#fff}
+.btn-soft{background:#ebe8ff;color:#5140b6}
+.btn-dark{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}
+.sidebar,.main-card,.result-card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.sidebar{padding:16px;position:sticky;top:14px}
+.side-title{font-size:.78rem;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);font-weight:900;margin:2px 0 10px}
+.nav{display:flex;flex-direction:column;gap:6px}
+.nav button{text-align:left;border:0;background:transparent;padding:9px 10px;border-radius:10px;color:#4e5b76;font-weight:700;font-size:.88rem}
+.nav button.active{background:#eeeaff;color:#4e3bc1}
+.nav button.done:after{content:" ✓";color:var(--good);font-weight:900}
+.side-note{margin-top:16px;background:#f0fbf8;padding:12px;border-radius:12px;color:#316e63;font-size:.82rem}
+.main-card{padding:24px;min-width:0}
+.section-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.section-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#eeeaff;font-size:1.35rem}
+.section-head h2{font-size:1.35rem;margin:0}
+.section-sub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+.question{border:1px solid var(--line);border-radius:16px;padding:17px;margin:14px 0;background:#fff}
+.q-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
+.q-num{font-size:.75rem;font-weight:900;color:var(--purple);text-transform:uppercase;letter-spacing:.8px}
+.q-type{font-size:.72rem;background:#f1f3f9;color:#65718a;padding:4px 8px;border-radius:20px;font-weight:800}
+.question h3{font-size:1rem;margin:0 0 12px;line-height:1.5}
+.code{background:#17233c;color:#e4efff;padding:12px 14px;border-radius:11px;font: .9rem/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0}
+.options{display:grid;gap:8px}
+.option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1.5px solid #e6eaf3;border-radius:11px;cursor:pointer;transition:.12s}
+.option:hover{border-color:#b9afff;background:#faf9ff}
+.option:has(input:checked){border-color:var(--purple);background:#f5f2ff}
+.option input{accent-color:var(--purple);margin-top:4px;flex-shrink:0}
+.option span{font-size:.91rem}
+.short-answer{width:100%;padding:11px 12px;border:1.5px solid #dce2ef;border-radius:10px;font:inherit;outline:none}
+.short-answer:focus{border-color:var(--purple);box-shadow:0 0 0 3px #7057e822}
+.feedback{display:none;margin-top:11px;padding:10px 12px;border-radius:10px;font-size:.88rem}
+.feedback.show{display:block}
+.feedback.good{background:#eaf8f1;color:#176b4d}
+.feedback.bad{background:#fff0f0;color:#9f3542}
+.hint{margin-top:10px}
+.hint summary{cursor:pointer;color:#6554c7;font-size:.83rem;font-weight:800}
+.hint p{margin:6px 0 0;color:var(--muted);font-size:.84rem}
+.section-controls{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.result-card{display:none;padding:25px;margin-top:18px}
+.result-card.show{display:block}
+.score-big{font-size:3rem;font-weight:950;color:var(--purple);line-height:1.1}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.score-stat{background:#f6f7fc;padding:13px;border-radius:12px;text-align:center}
+.score-stat strong{display:block;font-size:1.35rem}
+.score-stat span{font-size:.78rem;color:var(--muted)}
+.review{border-top:1px solid var(--line);padding:10px 0;font-size:.88rem}
+.review strong{display:block}
+.hidden{display:none!important}
+.footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:22px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{position:static}.nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.main-card{padding:16px}.hero{padding:23px}.score-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.toolbar{align-items:stretch}.toolbar-actions{width:100%}.toolbar-actions button{flex:1}.score-grid{grid-template-columns:1fr}.q-top{align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="eyebrow">Year 7 • ICT • Self-assessment</div>
+ <h1>JavaScript Quest 🚀</h1>
+ <p>Test your coding knowledge, unlock instant feedback and see which topics you have mastered. Read each question carefully and try without your notes first!</p>
+ <div class="hero-tags"><span class="pill">🧠 29 questions</span><span class="pill">💻 Code challenges</span><span class="pill">⭐ Instant feedback</span><span class="pill">🏁 Final score</span></div>
+</header>
+<div class="toolbar">
+ <div class="progress-area"><div class="progress-label"><span>Your progress</span><span id="progressText">0 / 29 answered</span></div><div class="track"><div class="fill" id="progressFill"></div></div></div>
+ <div class="toolbar-actions"><button class="btn btn-soft" id="resetBtn">↻ Restart</button><button class="btn btn-primary" id="finishTop">Finish quiz</button></div>
+</div>
+<div class="layout">
+<aside class="sidebar">
+ <div class="side-title">Quest map</div>
+ <nav class="nav" id="nav"></nav>
+ <div class="side-note">💡 <strong>Learning tip:</strong> If you get a question wrong, read the explanation and try to explain the correct answer in your own words.</div>
+</aside>
+<main class="main-card">
+ <div class="section-head"><div class="section-icon" id="sectionIcon">🧩</div><div><h2 id="sectionTitle">JavaScript basics</h2><div class="section-sub" id="sectionCount">Section 1 of 7</div></div></div>
+ <p class="section-sub" id="sectionDescription">Let's start with variables and data types.</p>
+ <div id="questions"></div>
+ <div class="section-controls"><button class="btn btn-soft" id="prevBtn">← Previous section</button><button class="btn btn-primary" id="nextBtn">Next section →</button></div>
+</main>
+</div>
+<section class="result-card" id="results" aria-live="polite">
+ <div class="eyebrow" style="color:#7057e8">Quest complete</div>
+ <h2 style="margin:5px 0 8px">Your results 🏆</h2>
+ <div class="score-big" id="scorePercent">0%</div>
+ <p id="scoreMessage"></p>
+ <div class="score-grid">
+  <div class="score-stat"><strong id="correctCount">0</strong><span>Correct</span></div>
+  <div class="score-stat"><strong id="wrongCount">0</strong><span>To revise</span></div>
+  <div class="score-stat"><strong id="answeredCount">0/29</strong><span>Attempted</span></div>
+ </div>
+ <h3>Topic breakdown</h3><div id="topicBreakdown"></div>
+ <h3>Review your answers</h3><div id="reviewList"></div>
+ <button class="btn btn-primary" id="tryAgain">Try again</button>
+</section>
+<div class="footer">Made for curious coders • Keep practising, one line at a time!</div>
+</div>
+<script>
+const sections=[
+ {title:"JavaScript foundations",icon:"🧱",desc:"Variables, data types and joining strings together.",qs:[
+  {q:"Which keyword can declare a variable whose value may change?",o:["let","const","alert","string"],a:0,why:"let declares a variable that can be reassigned later.",hint:"Think of the keyword you use when a value might be updated."},
+  {q:"Which data type stores a whole number or decimal number?",o:["String","Number","Boolean","Array"],a:1,why:"The Number type stores numeric values, including integers and decimals.",hint:"A score such as 17 or 8.5 belongs to this type."},
+  {q:'What is the data type of "Hello, Sam"?',o:["Number","Boolean","String","Undefined"],a:2,why:"Text enclosed in quotation marks is a String.",hint:"It is a sequence of characters."},
+  {q:"Which pair contains the two Boolean values?",o:["yes and no","on and off","true and false","1 and 0 only"],a:2,why:"Boolean values are true and false (without quotation marks).",hint:"Boolean values are used when checking conditions."},
+  {q:"What will this code display?",code:'let name = "Ava";\\nlet age = 12;\\nconsole.log("Name: " + name + ", age: " + age);',o:["Name: Ava, age: 12","Name: + Ava + age: + 12","Ava 12 Name: age:","Name: undefined, age: undefined"],a:0,why:"The + operator joins the text and variable values into one string. This is called concatenation.",hint:"Read the expression from left to right. The + signs join the pieces."}
+ ]},
+ {title:"Operators: arithmetic & comparison",icon:"🧮",desc:"Work out calculations and compare values.",qs:[
+  {q:"What is the result of 14 + 6 * 2?",o:["40","26","52","20"],a:1,why:"Multiplication happens before addition: 6 × 2 = 12, then 14 + 12 = 26.",hint:"Remember the order of operations."},
+  {q:"Which operator gives the remainder after division?",o:["/","*","%","-"],a:2,why:"The modulus operator % returns the remainder. For example, 17 % 5 is 2.",hint:"It is often useful for checking whether a number is even or odd."},
+  {q:"What does the expression 8 === '8' return?",o:["true","false","8","undefined"],a:1,why:"=== checks both value and data type. One value is a Number and the other is a String.",hint:"Look carefully at the quotation marks and the three equals signs."},
+  {q:"Which operator means 'greater than or equal to'?",o:["=>",">=","==","<="],a:1,why:">= means greater than or equal to. The order of the symbols matters.",hint:"It combines the greater-than symbol with the equals sign."}
+ ]},
+ {title:"Logical operators",icon:"🔐",desc:"Combine conditions and reverse Boolean values.",qs:[
+  {q:"Which logical operator is true only when BOTH conditions are true?",o:["|| (OR)","! (NOT)","&& (AND)","% (remainder)"],a:2,why:"AND (&&) requires both conditions to be true.",hint:"Think about the word 'and' in everyday instructions."},
+  {q:"A student can enter a club if they are in Year 7 OR Year 8. Which operator is suitable?",o:["&&","||","!","==="],a:1,why:"OR (||) allows either condition to be true.",hint:"Only one of the two year-group conditions needs to be true."},
+  {q:"What does !true evaluate to?",o:["true","false","null","1"],a:1,why:"The NOT operator ! reverses a Boolean value, so !true is false.",hint:"NOT flips the logical value."},
+  {q:"Select the two statements that are correct.",multi:true,o:["&& means AND","|| means OR","! means AND","&& means NOT"],a:[0,1],why:"&& is AND and || is OR. The ! symbol is NOT.",hint:"Match each symbol to its logical word."}
+ ]},
+ {title:"Simple & compound assignment",icon:"🛠️",desc:"Update variables using assignment shortcuts.",qs:[
+  {q:"What is the value of points after this code?",code:"let points = 9;\\npoints = points + 4;",o:["9","4","13","94"],a:2,why:"The expression adds 4 to 9 and assigns the result back to points.",hint:"Calculate the right-hand side first."},
+  {q:"What does total -= 3 mean?",o:["total = total + 3","total = total - 3","total = total * 3","total = 3 - total"],a:1,why:"The -= operator subtracts the given amount from the current variable value.",hint:"The symbol before = tells you which calculation to perform."},
+  {q:"What will this code display?",code:"let coins = 5;\\ncoins *= 3;\\nconsole.log(coins);",o:["8","15","53","2"],a:1,why:"*= multiplies the existing value by 3: 5 × 3 = 15.",hint:"Read *= as 'multiply by, then assign'."}
+ ]},
+ {title:"String manipulation",icon:"🔤",desc:"Change the case of text and use string methods.",qs:[
+  {q:'What does "coding".toUpperCase() return?',o:["coding","Coding","CODING","CoDiNg"],a:2,why:"toUpperCase() changes all letters in the string to uppercase.",hint:"Uppercase means capital letters."},
+  {q:'What does "HELLO".toLowerCase() return?',o:["hello","Hello","HELLO","hELLO"],a:0,why:"toLowerCase() converts all letters to lowercase.",hint:"Lowercase means small letters."},
+  {q:"Which method finds the number of characters in a string called word?",o:["word.length()","word.size","word.length","length(word)"],a:2,why:"In JavaScript, length is a property, so it is written as word.length without brackets.",hint:"It is a property rather than a method."},
+  {q:'What is the result of "Java" + "Script"?',o:["Java Script","Java+Script","JavaScript","Java/Script"],a:2,why:"The + operator concatenates the two strings directly; no space is added automatically.",hint:"The strings are joined exactly as written."}
+ ]},
+ {title:"Popup boxes & if/else",icon:"🪟",desc:"Interact with users and make decisions in code.",qs:[
+  {q:"Which popup displays a message with an OK button?",o:["prompt()","confirm()","alert()","input()"],a:2,why:"alert() displays a message and an OK button.",hint:"It is used to alert or inform the user."},
+  {q:"Which popup lets a user type an answer?",o:["alert()","prompt()","confirm()","console.log()"],a:1,why:"prompt() opens a dialog with a text input field.",hint:"The name suggests asking the user a question."},
+  {q:"What does confirm() return when the user clicks Cancel?",o:["true","false","'Cancel'","undefined"],a:1,why:"confirm() returns the Boolean false when Cancel is selected, and true when OK is selected.",hint:"It returns one of the two Boolean values."},
+  {q:"What is the purpose of if...else?",o:["To repeat code","To store a variable","To choose between code paths based on a condition","To change text to uppercase"],a:2,why:"if...else runs one block when a condition is true and another when it is false.",hint:"Imagine a program choosing between two paths."},
+  {q:"What will the code display?",code:"let temperature = 18;\\nif (temperature > 20) {\\n  console.log('Warm');\\n} else {\\n  console.log('Cool');\\n}",o:["Warm","Cool","18","Nothing"],a:1,why:"18 is not greater than 20, so the else block runs and displays Cool.",hint:"Check whether 18 is greater than 20."}
+ ]},
+ {title:"Artificial Intelligence & ML",icon:"🤖",desc:"Understand AI, machine learning and everyday examples.",qs:[
+  {q:"What does AI stand for?",o:["Automatic Internet","Artificial Intelligence","Advanced Instructions","Automated Information"],a:1,why:"AI stands for Artificial Intelligence: technology that performs tasks associated with human intelligence.",hint:"The first word is Artificial."},
+  {q:"What is machine learning?",o:["A computer learning patterns from data","A person repairing a computer","A computer storing files","A computer following only one fixed instruction"],a:0,why:"Machine learning is a type of AI in which systems learn patterns from data to make predictions or decisions.",hint:"Think about how a system can learn from examples."},
+  {q:"Which is an example of AI being used?",o:["A wooden ruler","A voice assistant recognising spoken commands","A plain notebook","A manual light switch"],a:1,why:"A voice assistant can use AI to recognise speech and respond to requests.",hint:"Choose the example where a computer interprets human language."},
+  {q:"True or false: A machine-learning system can improve its predictions by learning from more suitable training data.",tf:true,a:0,why:"Machine-learning models learn patterns from training data. Suitable, representative data can help improve predictions.",hint:"Training examples help a model learn patterns."}
+ ]}
+];
+let current=0, answers={}, checked={};
+const $=id=>document.getElementById(id);
+const total=sections.reduce((n,s)=>n+s.qs.length,0);
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function renderNav(){
+ $("nav").innerHTML=sections.map((s,i)=>`<button class="${i===current?'active ':''}${sectionDone(i)?'done':''}" data-sec="${i}">${s.icon} ${s.title}</button>`).join("");
+ document.querySelectorAll("[data-sec]").forEach(b=>b.onclick=()=>{current=+b.dataset.sec;render();});
+}
+function sectionDone(i){return sections[i].qs.every((q,j)=>answers[i+"-"+j]!==undefined);}
+function answeredCount(){return Object.keys(answers).length;}
+function updateProgress(){
+ $("progressText").textContent=`${answeredCount()} / ${total} answered`;
+ $("progressFill").style.width=(answeredCount()/total*100)+"%";
+}
+function render(){
+ const s=sections[current];$("sectionIcon").textContent=s.icon;$("sectionTitle").textContent=s.title;
+ $("sectionCount").textContent=`Section ${current+1} of ${sections.length} • ${s.qs.length} questions`;
+ $("sectionDescription").textContent=s.desc;
+ $("questions").innerHTML=s.qs.map((q,j)=>questionHTML(q,j)).join("");
+ $("prevBtn").disabled=current===0;$("nextBtn").textContent=current===sections.length-1?"View results →":"Next section →";
+ $("nextBtn").disabled=false;
+ renderNav();updateProgress();bindQuestions();
+}
+function questionHTML(q,j){
+ const key=current+"-"+j,ans=answers[key],wasChecked=!!checked[key];
+ let choices=(q.o||[]).map((v,k)=>`<label class="option"><input type="${q.multi?'checkbox':'radio'}" name="q${key}" value="${k}" ${q.multi?(Array.isArray(ans)&&ans.includes(k)?'checked':''):(ans===k?'checked':'')} ${wasChecked?'disabled':''}><span>${esc(v)}</span></label>`).join("");
+ if(q.tf) choices=`<label class="option"><input type="radio" name="q${key}" value="0" ${ans===0?'checked':''} ${wasChecked?'disabled':''}><span>True</span></label><label class="option"><input type="radio" name="q${key}" value="1" ${ans===1?'checked':''} ${wasChecked?'disabled':''}><span>False</span></label>`;
+ const code=q.code?`<div class="code">${esc(q.code.replace(/\\n/g,"\n"))}</div>`:"";
+ let feedback="";
+ if(wasChecked){const ok=isCorrect(q,ans);feedback=`<div class="feedback show ${ok?'good':'bad'}">${ok?'✓ Great work!':'↻ Not quite.'} ${esc(q.why)}</div>`;}
+ return `<article class="question" data-q="${j}"><div class="q-top"><span class="q-num">Question ${j+1}</span><span class="q-type">${q.multi?'Select all that apply':q.tf?'True or false':'Choose one answer'}</span></div><h3>${esc(q.q)}</h3>${code}<div class="options">${choices}</div><details class="hint"><summary>💡 Need a hint?</summary><p>${esc(q.hint)}</p></details><div class="feedback-slot">${feedback}</div>${!wasChecked?`<button class="btn btn-soft check-one" style="margin-top:12px" data-check="${j}">Check answer</button>`:''}</article>`;
+}
+function isCorrect(q,ans){
+ if(q.multi)return Array.isArray(ans)&&ans.length===q.a.length&&q.a.every(x=>ans.includes(x));
+ return ans===q.a;
+}
+function bindQuestions(){
+ document.querySelectorAll(".question").forEach(card=>{
+  const j=+card.dataset.q,key=current+"-"+j,q=sections[current].qs[j];
+  card.querySelectorAll("input").forEach(inp=>inp.addEventListener("change",()=>{
+   if(q.multi){let vals=[...card.querySelectorAll("input:checked")].map(x=>+x.value);answers[key]=vals;}
+   else answers[key]=+inp.value;
+   updateProgress();
+  }));
+  const btn=card.querySelector(".check-one");if(btn)btn.onclick=()=>checkOne(j);
+ });
+}
+function checkOne(j){
+ const key=current+"-"+j,q=sections[current].qs[j],ans=answers[key];
+ if(ans===undefined||(Array.isArray(ans)&&ans.length===0)){alert("Choose an answer first, then check it.");return;}
+ checked[key]=true;render();
+}
+$("prevBtn").onclick=()=>{if(current>0){current--;render();}};
+$("nextBtn").onclick=()=>{if(current<sections.length-1){current++;render();}else finish();};
+$("finishTop").onclick=finish;
+function finish(){
+ const missing=total-answeredCount();
+ if(missing>0&&!confirm(`You have ${missing} unanswered question(s). Finish anyway?`))return;
+ let correct=0,attempted=0,topic=[];
+ sections.forEach((s,i)=>{let c=0,a=0;s.qs.forEach((q,j)=>{let v=answers[i+"-"+j];if(v!==undefined){a++;attempted++;if(isCorrect(q,v)){c++;correct++;}}});topic.push({name:s.title,c,a,n:s.qs.length});});
+ const pct=Math.round(correct/total*100);
+ $("scorePercent").textContent=pct+"%";$("correctCount").textContent=correct;$("wrongCount").textContent=attempted-correct;$("answeredCount").textContent=attempted+"/"+total;
+ $("scoreMessage").textContent=pct>=85?"Excellent work! You are becoming a JavaScript star. 🌟":pct>=65?"Good effort! Review the topics below and strengthen the tricky bits. 💪":pct>=40?"You have made a start. Read the feedback and practise the topics that need attention. 🌱":"Every coder starts somewhere! Use the feedback as your learning guide, then try again. 🚀";
+ $("topicBreakdown").innerHTML=topic.map(t=>`<div class="review"><strong>${esc(t.name)} — ${t.c}/${t.n}</strong><div class="track"><div class="fill" style="width:${t.n?t.c/t.n*100:0}%"></div></div></div>`).join("");
+ $("reviewList").innerHTML=sections.map((s,i)=>s.qs.map((q,j)=>{let v=answers[i+"-"+j],ok=v!==undefined&&isCorrect(q,v);let chosen=v===undefined?"Not answered":Array.isArray(v)?v.map(x=>q.o[x]).join(", "):q.tf?(v===0?"True":"False"):q.o[v];return `<div class="review"><strong>${ok?'✓': '✗'} ${esc(q.q)}</strong><span>Your answer: ${esc(chosen)}. ${esc(q.why)}</span></div>`}).join("")).join("");
+ $("results").classList.add("show");$("results").scrollIntoView({behavior:"smooth"});
+}
+function reset(){if(!confirm("Restart the quiz? Your answers and score will be cleared."))return;current=0;answers={};checked={};$("results").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"});}
+$("resetBtn").onclick=reset;$("tryAgain").onclick=()=>{answers={};checked={};current=0;$("results").classList.remove("show");render();window.scrollTo({top:0,behavior:"smooth"});};
+render();
+</script>
+</body>
+</html>
